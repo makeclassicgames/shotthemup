@@ -1,15 +1,17 @@
 // Include Lib
 #include <raylib.h>
 
+#include "game.h"
 #include "player.h"
 #include "input.h"
+#include "resources.h"
 
 // prototype functions
 void init(void);
 void update(void);
 void draw(void);
 
-Player * player;
+Game game;
 Input input;
 
 // Main Function
@@ -21,12 +23,13 @@ int main()
     // While windows is open
     while (!WindowShouldClose())
     {
-        input = readInput();
+        game.lastInput = readInput();
         // update()
         update();
         // Draw()
         draw();
     }
+    deInitTextures();
     // Close Window
     CloseWindow();
     return 0;
@@ -39,15 +42,16 @@ void init(void)
     InitWindow(800, 450, "Hello Raylib");
     // Set target FPS
     SetTargetFPS(60);
-
-    initPlayer(&player);
+    initTextures();
+    initGame(&game);
+   
 }
 
 // update()
 void update(void)
 {
 
-    updatePlayer(&player, input);
+    updateGame(&game);
 }
 
 // draw
@@ -58,9 +62,8 @@ void draw(void)
     // Clear Background
     ClearBackground(RAYWHITE);
     // Draw Text
-    DrawText("Hello Raylib", 290, 200, 20, BLACK);
     // Finish Drawing Mode
    
-    drawPlayer(&player);
+    drawGame(&game);
     EndDrawing();
 }

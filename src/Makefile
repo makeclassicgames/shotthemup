@@ -401,6 +401,8 @@ endif
 #------------------------------------------------------------------------------------------------
 PROJECT_SOURCE_FILES ?= \
    input.c  \
+   resources.c \
+   game.c \
    player.c \
    shotemup.c \
 

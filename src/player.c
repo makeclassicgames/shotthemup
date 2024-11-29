@@ -1,4 +1,5 @@
 #include "player.h"
+#include "resources.h"
 #include <raylib.h>
 
 void initPlayer(Player *player)
@@ -7,6 +8,7 @@ void initPlayer(Player *player)
     player->score = 0;
     player->position.x = 400;
     player->position.y = 400;
+    player->texture = getSpriteTexture(SPRITE_PLAYER_1);
 }
 
 void updatePlayer(Player* player, Input input){
@@ -30,7 +32,8 @@ void updatePlayer(Player* player, Input input){
 }
 
 void drawPlayer(Player *player){
-    DrawRectangle(player->position.x,
-     player->position.y,
-     20, 20, RED);
+    DrawTexture(player->texture,
+    player->position.x,
+    player->position.y,WHITE);
+
 }

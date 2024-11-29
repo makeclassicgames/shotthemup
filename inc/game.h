@@ -2,12 +2,23 @@
 #define GAME_H
 
 #include "player.h"
+
+typedef enum state{
+    INITIAL,
+    MENU,
+    GAME_LOOP,
+    GAME_OVER,
+    WIN
+}Status;
+
 typedef struct{
     Player player;
+    Status status;
+    Input lastInput;
 }Game;
 
-void initGame(Game *game);
-void updateGame(Game *game);
-void drawGame(Game *game);
+void initGame(Game *);
+void updateGame(Game *);
+void drawGame(Game *);
 
 #endif
