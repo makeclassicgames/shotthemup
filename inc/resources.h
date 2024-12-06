@@ -7,6 +7,7 @@
 #define SKY_BG 1
 
 #define SPRITE_PLAYER_1 0
+#define SPRITE_ENEMY_1 1
 
 
 void initTextures(void);

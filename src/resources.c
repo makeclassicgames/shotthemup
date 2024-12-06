@@ -19,8 +19,11 @@ void initTextures(void){
     sprintf(buffer,GFX_TEXTURES_PATH,"sky.jpg");
     gfxTextures[SKY_BG]=LoadTexture(buffer);
     //Sprites
-    sprintf(buffer,SPRITES_TEXTURES_PATH,"nave.png");
+    sprintf(buffer,SPRITES_TEXTURES_PATH,"navesprt.png");
     spriteTextures[SPRITE_PLAYER_1]=LoadTexture(buffer);
+    //Enemy Sprite
+    sprintf(buffer,SPRITES_TEXTURES_PATH,"enemy.png");
+    spriteTextures[SPRITE_ENEMY_1]=LoadTexture(buffer);
 }
 
 Texture2D getSpriteTexture(int id){
@@ -33,4 +36,7 @@ Texture2D getGfxTexture(int id){
 
 void deInitTextures(void){
     UnloadTexture(getGfxTexture(TITLE_SCREEN));
+    UnloadTexture(getGfxTexture(SKY_BG));
+    UnloadTexture(getSpriteTexture(SPRITE_PLAYER_1));
+    UnloadTexture(getSpriteTexture(SPRITE_ENEMY_1));
 }

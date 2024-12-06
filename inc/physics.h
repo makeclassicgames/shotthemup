@@ -4,4 +4,14 @@
         float x;
         float y;
     }Point;
+
+    typedef struct{
+        float dx;
+        float dy;
+    }Speed;
+
+    typedef struct{
+        float rotation;
+        float scale;
+    }Transformation;
 #endif

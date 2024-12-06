@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "ecs.h"
 #include "player.h"
 
 typedef enum state{
@@ -12,6 +13,7 @@ typedef enum state{
 }Status;
 
 typedef struct{
+    ECS ecs;
     Player player;
     Status status;
     Input lastInput;
