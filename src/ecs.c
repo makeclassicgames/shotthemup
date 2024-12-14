@@ -2,19 +2,21 @@
 
 static int next_entity_id = 0;
 
+
 void ECS_Init(ECS *ecs)
 {
     ecs->count = 0;
+    ecs->ecs_delta = 0;
 }
 
-Entity ECS_CreateEntity(ECS *ecs)
+int ECS_CreateEntity(ECS *ecs)
 {
     Entity entity;
     entity.entity_id = next_entity_id;
     next_entity_id++;
     ecs->entities[ecs->count] = entity;
     ecs->count++;
-    return entity;
+    return entity.entity_id;
 }
 
 Entity ECS_GetEntity(ECS *ecs, int entity_id)
@@ -59,11 +61,15 @@ void ECS_DestroyEntity(ECS *ecs, int entity_id)
 
 void ECS_UpdateEntities(ECS *ecs)
 {
+    ecs->ecs_delta++;
     for (int i = 0; i < ecs->count; i++)
     {
         // update Position
-        ecs->entities[i].component.pos.x += ecs->entities[i].component.speed.dx;
-        ecs->entities[i].component.pos.y += ecs->entities[i].component.speed.dy;
+        ecs->entities[i].positionComponent.position.x += ecs->entities[i].positionComponent.speed.dx;
+        ecs->entities[i].positionComponent.position.y += ecs->entities[i].positionComponent.speed.dy;
+        // update Animation
+        if(ecs->ecs_delta%ecs->entities[i].sprite.frameDelay==0)
+            ecs->entities[i].sprite.currentFrame++%ecs->entities[i].sprite.frameCount;   
     }
 }
 
@@ -73,14 +79,16 @@ void ECS_DrawEntities(ECS *ecs)
     for (int i = 0; i < ecs->count; i++)
     {
         // Draw entity
-        if (ecs->entities[i].component.visible)
-        {   Sprite sprite = ecs->entities[i].component.sprite;
+        if (ecs->entities[i].visibilityComponent.visible)
+        {   SpriteComponent sprite = ecs->entities[i].sprite;
+            Transformation transform = ecs->entities[i].transform;
             //calculate Current Frame
             DrawTexturePro(sprite.texture,
-                           (Rectangle){0,
-                           0,sprite.frameWidth,sprite.frameHeight},
-                           (Rectangle){ecs->entities[i].component.pos.x,
-                            ecs->entities[i].component.pos.y,sprite.frameWidth,sprite.frameHeight},(Vector2){0,0},0.0f, WHITE);
+                           (Rectangle){sprite.currentFrame * sprite.frameWidth,
+                           sprite.currentAnim * sprite.frameHeight,
+                           sprite.frameWidth,sprite.frameHeight},
+                           (Rectangle){ecs->entities[i].positionComponent.position.x,
+                            ecs->entities[i].positionComponent.position.y,sprite.frameWidth,sprite.frameHeight},(Vector2){0,0},transform.rotation, WHITE);
         }
     }
 }

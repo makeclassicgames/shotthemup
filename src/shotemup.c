@@ -24,6 +24,7 @@ int main()
     while (!WindowShouldClose())
     {
         game.lastInput = readInput();
+        printf("Input: %d\n", game.lastInput);
         // update()
         update();
         // Draw()

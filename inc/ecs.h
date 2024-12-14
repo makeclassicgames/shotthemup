@@ -8,38 +8,75 @@
 
 typedef struct{
     Texture2D texture;
+    Rectangle rect;
+}Background;
+
+
+
+
+typedef Transformation TransformComponent;
+
+typedef struct{
+    Texture2D texture;
     int frameCount;
     int animCount;
     int frameWidth;
     int frameHeight;
     int currentFrame;
     int currentAnim;
-}Sprite;
+    int frameDelay;
+}SpriteComponent;
 
 typedef struct{
-    Point pos;
+    Point position;
     Speed speed;
-    bool visible;
-    Transform transform;
-    Sprite sprite;
-}Component;
+}PositionComponent;
 
 typedef struct{
-    Component component;
+    bool visible;
+}VisibilityComponent;
+
+
+typedef struct{
+    PositionComponent positionComponent;
+    VisibilityComponent visibilityComponent;
+    TransformComponent transform;
+    SpriteComponent sprite;
     int entity_id;
 }Entity;
 
 typedef struct{
     Entity entities[MAX_ENTITIES];
     int count;
+    int ecs_delta;
 }ECS;
 
+typedef struct Scene Scene;
+
+typedef void (*updateScene)(Scene *self);
+typedef void (*drawScene)(Scene *self);
+
+typedef struct Scene{
+    Background background;
+    Camera2D camera;
+    ECS ecs;
+    updateScene update;
+    drawScene draw;
+};
+
+
+
+
 void ECS_Init(ECS *ecs);
-Entity ECS_CreateEntity(ECS *ecs);
+int ECS_CreateEntity(ECS *ecs);
 void ECS_DestroyEntity(ECS *ecs, int entity_id);
 void ECS_UpdateEntities(ECS *ecs);
 void ECS_DrawEntities(ECS *ecs);
 Entity ECS_GetEntity(ECS *ecs, int entity_id);
 void ECS_SetEntity(ECS *ecs, int entity_id, Entity entity);
+
+
+//Scene functions
+void initScene(Scene *scene);
 
 #endif

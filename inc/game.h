@@ -13,7 +13,7 @@ typedef enum state{
 }Status;
 
 typedef struct{
-    ECS ecs;
+    Scene gameScene;
     Player player;
     Status status;
     Input lastInput;

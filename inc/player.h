@@ -5,13 +5,19 @@
 #include "ecs.h"
 #include "input.h"
 
+ typedef struct Player Player;
+    
+ typedef void (*updatePlayer)(Player* player, Input input);
 
-    typedef struct{
-        Entity * entity;
+ typedef struct Player{
+        int entity_id;
         short lives;
         long score;
-    }Player;
+        updatePlayer update;
+};
+   
+
+   
 
     void initPlayer(Player *player);
-    void updatePlayer(Player *player,Input input);
 #endif

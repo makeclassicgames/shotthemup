@@ -4,55 +4,121 @@
 #include "game.h"
 #include "resources.h"
 
-void initGame(Game * game){
-    ECS_Init(&game->ecs);
+void updateGameScene(Scene *scene){
+   
+    ECS_UpdateEntities(&scene->ecs);
+    
+}
 
-    Entity playerEntity = ECS_CreateEntity(&game->ecs);
+void drawGameScene(Scene *scene){
+    
+    DrawTextureEx(getGfxTexture(SKY_BG),
+                    (Vector2){0,0},
+                    0.0f,2.3f,WHITE);
+    ECS_DrawEntities(&scene->ecs);
+}
+
+void updatePlayer(Player * player, Input input){
+    Entity playerEntity = ECS_GetEntity(&player->ecs,player->entity_id);
+    playerEntity.positionComponent.speed.dy = 0;
+    playerEntity.positionComponent.speed.dx = 0;
+    switch (input)
+    {
+    case UP:
+        playerEntity.positionComponent.speed.dy = -5;
+        break;
+    case DOWN:
+         playerEntity.positionComponent.speed.dy = 5;
+        break;
+    case LEFT:
+         playerEntity.positionComponent.speed.dx = -5;
+        break;
+    case RIGHT: 
+        playerEntity.positionComponent.speed.dy = 5;
+        break;
   
-    game->player.entity=&playerEntity;
+    default:
+        break;
+    }
+    ECS_SetEntity(&player->ecs,player->entity_id,playerEntity);
+}
+
+void initGame(Game * game){
+    ECS_Init(&game->gameScene.ecs);
+
+    int playerEntityId= ECS_CreateEntity(&game->gameScene.ecs);
+  
+    game->player.entity_id=playerEntityId;
+    Entity playerEntity = ECS_GetEntity(&game->gameScene.ecs,playerEntityId);
+    playerEntity.positionComponent.position.x=100;
+    playerEntity.positionComponent.position.y=400;
+    playerEntity.visibilityComponent.visible=true;
+    
+    playerEntity.sprite.texture = getSpriteTexture(SPRITE_PLAYER_1);
+    playerEntity.sprite.frameCount = 2;
+    playerEntity.sprite.animCount = 3;
+    playerEntity.sprite.frameWidth = 64;
+    playerEntity.sprite.frameHeight = 64;
+    playerEntity.sprite.currentFrame = 0;
+    playerEntity.sprite.currentAnim = 0;
+    playerEntity.sprite.frameDelay = 5;
     initPlayer(&game->player);
     game->status=GAME_LOOP;
     
     //init Entities
     
 
-    Entity enemyEntity = ECS_CreateEntity(&game->ecs);
-    enemyEntity.component.pos.x=100;
-    enemyEntity.component.pos.y=100;
-    enemyEntity.component.speed.dy=5;
-    enemyEntity.component.visible=true;
-    enemyEntity.component.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity.component.sprite.frameCount=2;
-    enemyEntity.component.sprite.animCount=2;
-    enemyEntity.component.sprite.frameWidth=64;
-    enemyEntity.component.sprite.frameHeight=64;
+    int enemyEntity_id = ECS_CreateEntity(&game->gameScene.ecs);
+    Entity enemyEntity = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id);
+    enemyEntity.positionComponent.position.x=100;
+    enemyEntity.positionComponent.position.y=100;
+    enemyEntity.positionComponent.speed.dy=5;
+    enemyEntity.visibilityComponent.visible=true;
+    enemyEntity.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity.sprite.currentFrame=0;
+    enemyEntity.sprite.currentAnim=0;
+    enemyEntity.sprite.frameCount=2;
+    enemyEntity.sprite.animCount=2;
+    enemyEntity.sprite.frameWidth=64;
+    enemyEntity.sprite.frameHeight=64;
+    enemyEntity.sprite.frameDelay=10;
 
     //ENtity2
-    Entity enemyEntity2 = ECS_CreateEntity(&game->ecs);
-    enemyEntity2.component.pos.x=160;
-    enemyEntity2.component.pos.y=100;
-    enemyEntity2.component.visible=true;
-    enemyEntity2.component.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity2.component.sprite.frameCount=2;
-    enemyEntity2.component.sprite.animCount=2;
-    enemyEntity2.component.sprite.frameWidth=64;
-    enemyEntity2.component.sprite.frameHeight=64;
+    int enemyEntity_id2 = ECS_CreateEntity(&game->gameScene.ecs);
+    Entity enemyEntity2 = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id2);    
+    enemyEntity2.positionComponent.position.x=160;
+    enemyEntity2.positionComponent.position.y=100;
+    enemyEntity2.visibilityComponent.visible=true;
+    enemyEntity2.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity2.sprite.currentFrame=0;
+    enemyEntity2.sprite.currentAnim=0;
+    enemyEntity2.sprite.frameCount=2;
+    enemyEntity2.sprite.animCount=2;
+    enemyEntity2.sprite.frameWidth=64;
+    enemyEntity2.sprite.frameHeight=64;
+    enemyEntity2.sprite.frameDelay=10;
     //Entity3
 
-    Entity enemyEntity3 = ECS_CreateEntity(&game->ecs);
-    enemyEntity3.component.pos.x=220;
-    enemyEntity3.component.pos.y=100;
-    enemyEntity3.component.visible=true;
-    enemyEntity3.component.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity3.component.sprite.frameCount=2;
-    enemyEntity3.component.sprite.animCount=2;
-    enemyEntity3.component.sprite.frameWidth=64;
-    enemyEntity3.component.sprite.frameHeight=64;
+    int enemyEntity_id3 = ECS_CreateEntity(&game->gameScene.ecs);
+    Entity enemyEntity3 = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id3);    
+    enemyEntity3.positionComponent.position.x=220;
+    enemyEntity3.positionComponent.position.y=100;
+    enemyEntity3.visibilityComponent.visible=true;
+    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity3.sprite.frameCount=2;
+    enemyEntity3.sprite.animCount=2;
+    enemyEntity3.sprite.frameWidth=64;
+    enemyEntity3.sprite.frameHeight=64;
+    enemyEntity3.sprite.currentFrame=0;
+    enemyEntity3.sprite.currentAnim=0;
+    enemyEntity3.sprite.frameDelay=5;
 
-    ECS_SetEntity(&game->ecs,enemyEntity.entity_id,enemyEntity);
-    ECS_SetEntity(&game->ecs,enemyEntity2.entity_id,enemyEntity2);
-    ECS_SetEntity(&game->ecs,enemyEntity3.entity_id,enemyEntity3);
-    ECS_SetEntity(&game->ecs,playerEntity.entity_id,playerEntity);
+    ECS_SetEntity(&game->gameScene.ecs,enemyEntity.entity_id,enemyEntity);
+    ECS_SetEntity(&game->gameScene.ecs,enemyEntity2.entity_id,enemyEntity2);
+    ECS_SetEntity(&game->gameScene.ecs,enemyEntity3.entity_id,enemyEntity3);
+    ECS_SetEntity(&game->gameScene.ecs,game->player.entity_id,playerEntity);
+    game->gameScene.update=updateGameScene;
+    game->gameScene.draw=drawGameScene;
 }
 
 void updateGame(Game * game){
@@ -69,9 +135,9 @@ void updateGame(Game * game){
             game->status=GAME_LOOP;
         }
     case GAME_LOOP:
-        updatePlayer(&game->player,game->lastInput);
-        ECS_SetEntity(&game->ecs,game->player.entity->entity_id,*game->player.entity);
-        ECS_UpdateEntities(&game->ecs);
+         updatePlayer(&game->player,game->lastInput);
+
+         game->gameScene.update(&game->gameScene);
         break;
     
     default:
@@ -90,13 +156,8 @@ void drawGame(Game* game){
         DrawTexture(texture,0,0,WHITE);
         break;
     case GAME_LOOP:
-        DrawText("Game Loop", 290, 200, 20, BLACK);
         
-        DrawTextureEx(getGfxTexture(SKY_BG),
-                    (Vector2){0,0},
-                    0.0f,2.3f,WHITE);
-        //DrawTexture(,0,0,WHITE);
-        ECS_DrawEntities(&game->ecs);
+        game->gameScene.draw(&game->gameScene);
         break;
     
     default:
