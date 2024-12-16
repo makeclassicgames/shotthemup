@@ -6,25 +6,26 @@
 #include "input.h"
 #include "resources.h"
 
+
 // prototype functions
 void init(void);
 void update(void);
 void draw(void);
 
-Game game;
+
 Input input;
 
 // Main Function
 int main()
 {
 
+    Game* game = getCurrentGame();
     // Init()
     init();
     // While windows is open
     while (!WindowShouldClose())
     {
-        game.lastInput = readInput();
-        printf("Input: %d\n", game.lastInput);
+        game->lastInput = readInput();
         // update()
         update();
         // Draw()
@@ -39,12 +40,13 @@ int main()
 // init()
 void init(void)
 {
+    Game* game = getCurrentGame();
     // Init Window (width, Height, title)
     InitWindow(800, 450, "Hello Raylib");
     // Set target FPS
     SetTargetFPS(60);
     initTextures();
-    initGame(&game);
+    initGame(game);
    
 }
 
@@ -52,12 +54,14 @@ void init(void)
 void update(void)
 {
 
-    updateGame(&game);
+    Game* game = getCurrentGame();
+    updateGame(game);
 }
 
 // draw
 void draw(void)
 {
+    Game* game = getCurrentGame();
     // init drawing mode
     BeginDrawing();
     // Clear Background
@@ -65,6 +69,6 @@ void draw(void)
     // Draw Text
     // Finish Drawing Mode
    
-    drawGame(&game);
+    drawGame(game);
     EndDrawing();
 }

@@ -19,8 +19,9 @@ typedef struct{
     Input lastInput;
 }Game;
 
-void initGame(Game *);
-void updateGame(Game *);
-void drawGame(Game *);
+Game * getCurrentGame(void);
+void initGame(Game * );
+void updateGame(Game* );
+void drawGame(Game * );
 
 #endif

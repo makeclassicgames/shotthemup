@@ -4,6 +4,12 @@
 #include "game.h"
 #include "resources.h"
 
+static Game game;
+
+Game * getCurrentGame(void){
+    return &game;
+}
+
 void updateGameScene(Scene *scene){
    
     ECS_UpdateEntities(&scene->ecs);
@@ -18,8 +24,9 @@ void drawGameScene(Scene *scene){
     ECS_DrawEntities(&scene->ecs);
 }
 
-void updatePlayer(Player * player, Input input){
-    Entity playerEntity = ECS_GetEntity(&player->ecs,player->entity_id);
+void updateGamePlayer(Player * player, Input input){
+    Game * game = getCurrentGame();
+    Entity playerEntity = ECS_GetEntity(&game->gameScene.ecs,player->entity_id);
     playerEntity.positionComponent.speed.dy = 0;
     playerEntity.positionComponent.speed.dx = 0;
     switch (input)
@@ -34,16 +41,16 @@ void updatePlayer(Player * player, Input input){
          playerEntity.positionComponent.speed.dx = -5;
         break;
     case RIGHT: 
-        playerEntity.positionComponent.speed.dy = 5;
+        playerEntity.positionComponent.speed.dx = 5;
         break;
   
     default:
         break;
     }
-    ECS_SetEntity(&player->ecs,player->entity_id,playerEntity);
+    ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
 }
 
-void initGame(Game * game){
+void initGame(Game* game){
     ECS_Init(&game->gameScene.ecs);
 
     int playerEntityId= ECS_CreateEntity(&game->gameScene.ecs);
@@ -64,7 +71,7 @@ void initGame(Game * game){
     playerEntity.sprite.frameDelay = 5;
     initPlayer(&game->player);
     game->status=GAME_LOOP;
-    
+    game->player.update=updateGamePlayer;
     //init Entities
     
 
@@ -135,9 +142,9 @@ void updateGame(Game * game){
             game->status=GAME_LOOP;
         }
     case GAME_LOOP:
-         updatePlayer(&game->player,game->lastInput);
+        game->player.update(&game->player,game->lastInput);
 
-         game->gameScene.update(&game->gameScene);
+        game->gameScene.update(&game->gameScene);
         break;
     
     default:
