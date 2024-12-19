@@ -8,6 +8,8 @@
 
 typedef struct{
     Texture2D texture;
+    int xoffSet;
+    int yoffSet;
     Rectangle rect;
 }Background;
 
@@ -55,11 +57,13 @@ typedef struct Scene Scene;
 
 typedef void (*updateScene)(Scene *self);
 typedef void (*drawScene)(Scene *self);
+typedef void (*initScene)(Scene *self, Background Background);
 
 typedef struct Scene{
     Background background;
     Camera2D camera;
     ECS ecs;
+    initScene init;
     updateScene update;
     drawScene draw;
 };
@@ -76,7 +80,5 @@ Entity ECS_GetEntity(ECS *ecs, int entity_id);
 void ECS_SetEntity(ECS *ecs, int entity_id, Entity entity);
 
 
-//Scene functions
-void initScene(Scene *scene);
 
 #endif

@@ -8,6 +8,7 @@
 
 #define SPRITE_PLAYER_1 0
 #define SPRITE_ENEMY_1 1
+#define SPRITE_BULLET 2
 
 
 void initTextures(void);

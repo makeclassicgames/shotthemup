@@ -11,17 +11,95 @@ Game * getCurrentGame(void){
 }
 
 void updateGameScene(Scene *scene){
-   
+    scene->background.yoffSet++;
+    scene->camera.target.y=scene->background.yoffSet;
     ECS_UpdateEntities(&scene->ecs);
     
 }
 
 void drawGameScene(Scene *scene){
     
-    DrawTextureEx(getGfxTexture(SKY_BG),
-                    (Vector2){0,0},
-                    0.0f,2.3f,WHITE);
+
+    BeginMode2D(scene->camera);
+        DrawTextureEx(scene->background.texture, (Vector2){scene->background.xoffSet,scene->background.yoffSet}, 0.0f, 2.7f, WHITE);
+    EndMode2D();
     ECS_DrawEntities(&scene->ecs);
+}
+
+void initGameScene(Scene *scene, Background background){
+    
+    int enemyEntity_id = ECS_CreateEntity(&scene->ecs);
+    scene->background.texture=background.texture;
+    scene->background.xoffSet=background.xoffSet;
+    scene->background.yoffSet=background.yoffSet;
+    Entity enemyEntity = ECS_GetEntity(&scene->ecs,enemyEntity_id);
+    enemyEntity.positionComponent.position.x=100;
+    enemyEntity.positionComponent.position.y=100;
+    enemyEntity.visibilityComponent.visible=true;
+    enemyEntity.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity.sprite.currentFrame=0;
+    enemyEntity.sprite.currentAnim=0;
+    enemyEntity.sprite.frameCount=2;
+    enemyEntity.sprite.animCount=2;
+    enemyEntity.sprite.frameWidth=64;
+    enemyEntity.sprite.frameHeight=64;
+    enemyEntity.sprite.frameDelay=10;
+
+    //ENtity2
+    int enemyEntity_id2 = ECS_CreateEntity(&scene->ecs);
+    Entity enemyEntity2 = ECS_GetEntity(&scene->ecs,enemyEntity_id2);    
+    enemyEntity2.positionComponent.position.x=160;
+    enemyEntity2.positionComponent.position.y=100;
+    enemyEntity2.visibilityComponent.visible=true;
+    enemyEntity2.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity2.sprite.currentFrame=0;
+    enemyEntity2.sprite.currentAnim=0;
+    enemyEntity2.sprite.frameCount=2;
+    enemyEntity2.sprite.animCount=2;
+    enemyEntity2.sprite.frameWidth=64;
+    enemyEntity2.sprite.frameHeight=64;
+    enemyEntity2.sprite.frameDelay=10;
+    //Entity3
+
+    int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
+    Entity enemyEntity3 = ECS_GetEntity(&scene->ecs,enemyEntity_id3);    
+    enemyEntity3.positionComponent.position.x=220;
+    enemyEntity3.positionComponent.position.y=100;
+    enemyEntity3.visibilityComponent.visible=true;
+    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity3.sprite.frameCount=2;
+    enemyEntity3.sprite.animCount=2;
+    enemyEntity3.sprite.frameWidth=64;
+    enemyEntity3.sprite.frameHeight=64;
+    enemyEntity3.sprite.currentFrame=0;
+    enemyEntity3.sprite.currentAnim=0;
+    enemyEntity3.sprite.frameDelay=5;
+
+    //Bullet
+    int bulletEntity_id = ECS_CreateEntity(&scene->ecs);
+    Entity bulletEntity = ECS_GetEntity(&scene->ecs,bulletEntity_id);
+    bulletEntity.positionComponent.position.x=200;
+    bulletEntity.positionComponent.position.y=200;
+    bulletEntity.visibilityComponent.visible=true;
+    bulletEntity.sprite.texture=getSpriteTexture(SPRITE_BULLET);
+    bulletEntity.sprite.frameCount=1;
+    bulletEntity.sprite.animCount=1;
+    bulletEntity.sprite.frameWidth=8;
+    bulletEntity.sprite.frameHeight=8;
+    bulletEntity.sprite.currentFrame=0;
+    bulletEntity.sprite.currentAnim=0;
+    bulletEntity.sprite.frameDelay=1;
+
+    //init camera
+    scene->camera.offset=(Vector2){0,0};
+    scene->camera.target=(Vector2){scene->background.xoffSet,scene->background.xoffSet+scene->background.yoffSet};
+    scene->camera.rotation=0.0f;
+    scene->camera.zoom=1.0f;
+
+    ECS_SetEntity(&scene->ecs,enemyEntity.entity_id,enemyEntity);
+    ECS_SetEntity(&scene->ecs,enemyEntity2.entity_id,enemyEntity2);
+    ECS_SetEntity(&scene->ecs,enemyEntity3.entity_id,enemyEntity3);
+    ECS_SetEntity(&scene->ecs,bulletEntity.entity_id,bulletEntity);
 }
 
 void updateGamePlayer(Player * player, Input input){
@@ -75,55 +153,13 @@ void initGame(Game* game){
     //init Entities
     
 
-    int enemyEntity_id = ECS_CreateEntity(&game->gameScene.ecs);
-    Entity enemyEntity = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id);
-    enemyEntity.positionComponent.position.x=100;
-    enemyEntity.positionComponent.position.y=100;
-    enemyEntity.positionComponent.speed.dy=5;
-    enemyEntity.visibilityComponent.visible=true;
-    enemyEntity.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity.sprite.currentFrame=0;
-    enemyEntity.sprite.currentAnim=0;
-    enemyEntity.sprite.frameCount=2;
-    enemyEntity.sprite.animCount=2;
-    enemyEntity.sprite.frameWidth=64;
-    enemyEntity.sprite.frameHeight=64;
-    enemyEntity.sprite.frameDelay=10;
-
-    //ENtity2
-    int enemyEntity_id2 = ECS_CreateEntity(&game->gameScene.ecs);
-    Entity enemyEntity2 = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id2);    
-    enemyEntity2.positionComponent.position.x=160;
-    enemyEntity2.positionComponent.position.y=100;
-    enemyEntity2.visibilityComponent.visible=true;
-    enemyEntity2.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity2.sprite.currentFrame=0;
-    enemyEntity2.sprite.currentAnim=0;
-    enemyEntity2.sprite.frameCount=2;
-    enemyEntity2.sprite.animCount=2;
-    enemyEntity2.sprite.frameWidth=64;
-    enemyEntity2.sprite.frameHeight=64;
-    enemyEntity2.sprite.frameDelay=10;
-    //Entity3
-
-    int enemyEntity_id3 = ECS_CreateEntity(&game->gameScene.ecs);
-    Entity enemyEntity3 = ECS_GetEntity(&game->gameScene.ecs,enemyEntity_id3);    
-    enemyEntity3.positionComponent.position.x=220;
-    enemyEntity3.positionComponent.position.y=100;
-    enemyEntity3.visibilityComponent.visible=true;
-    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity3.sprite.frameCount=2;
-    enemyEntity3.sprite.animCount=2;
-    enemyEntity3.sprite.frameWidth=64;
-    enemyEntity3.sprite.frameHeight=64;
-    enemyEntity3.sprite.currentFrame=0;
-    enemyEntity3.sprite.currentAnim=0;
-    enemyEntity3.sprite.frameDelay=5;
-
-    ECS_SetEntity(&game->gameScene.ecs,enemyEntity.entity_id,enemyEntity);
-    ECS_SetEntity(&game->gameScene.ecs,enemyEntity2.entity_id,enemyEntity2);
-    ECS_SetEntity(&game->gameScene.ecs,enemyEntity3.entity_id,enemyEntity3);
+    game->gameScene.init=initGameScene;
     ECS_SetEntity(&game->gameScene.ecs,game->player.entity_id,playerEntity);
+    Background bg;
+    bg.texture=getGfxTexture(SKY_BG);
+    bg.xoffSet=0;
+    bg.yoffSet=0;
+    game->gameScene.init(&game->gameScene,bg);
     game->gameScene.update=updateGameScene;
     game->gameScene.draw=drawGameScene;
 }

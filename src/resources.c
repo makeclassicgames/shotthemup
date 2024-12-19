@@ -24,6 +24,9 @@ void initTextures(void){
     //Enemy Sprite
     sprintf(buffer,SPRITES_TEXTURES_PATH,"enemy.png");
     spriteTextures[SPRITE_ENEMY_1]=LoadTexture(buffer);
+    //Bullet Sprite
+    sprintf(buffer,SPRITES_TEXTURES_PATH,"bullet.png");
+    spriteTextures[SPRITE_BULLET]=LoadTexture(buffer);
 }
 
 Texture2D getSpriteTexture(int id){
@@ -39,4 +42,5 @@ void deInitTextures(void){
     UnloadTexture(getGfxTexture(SKY_BG));
     UnloadTexture(getSpriteTexture(SPRITE_PLAYER_1));
     UnloadTexture(getSpriteTexture(SPRITE_ENEMY_1));
+    UnloadTexture(getSpriteTexture(SPRITE_BULLET));
 }
