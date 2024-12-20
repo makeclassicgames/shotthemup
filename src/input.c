@@ -53,11 +53,26 @@ void readGamepadInput(InputState *state){
         state->inputState[INPUT_LEFT]=true;
     }
   
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
+    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
         state->inputState[INPUT_FIRE]=true;
     }
 
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
+    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
         state->inputState[INPUT_START]=true;
     }
+
+    //D-pad
+    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN)){
+        state->inputState[INPUT_DOWN]=true;
+    }
+    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP)){
+        state->inputState[INPUT_UP]=true;
+    }
+    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
+        state->inputState[INPUT_LEFT]=true;
+    }
+    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
+        state->inputState[INPUT_RIGHT]=true;
+    }
+
 }

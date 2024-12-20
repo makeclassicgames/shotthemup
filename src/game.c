@@ -123,6 +123,28 @@ void updateGamePlayer(Player * player, InputState input){
     if(input.inputState[INPUT_RIGHT]){
         playerEntity.positionComponent.speed.dx = 5;
     }
+
+    if(input.inputState[INPUT_FIRE]){
+        //fire bullet
+        int bulletEntity_id = ECS_CreateEntity(&game->gameScene.ecs);
+        Entity bulletEntity = ECS_GetEntity(&game->gameScene.ecs,bulletEntity_id);
+        bulletEntity.positionComponent.position.x=playerEntity.positionComponent.position.x+16;
+        bulletEntity.positionComponent.position.y=playerEntity.positionComponent.position.y-8;
+        bulletEntity.visibilityComponent.visible=true;
+        bulletEntity.sprite.texture=getSpriteTexture(SPRITE_BULLET);
+        bulletEntity.sprite.frameCount=1;
+        bulletEntity.sprite.animCount=1;
+        bulletEntity.sprite.frameWidth=16;
+        bulletEntity.sprite.frameHeight=16;
+        bulletEntity.sprite.currentFrame=0;
+        bulletEntity.sprite.currentAnim=0;
+        bulletEntity.sprite.frameDelay=1;
+        bulletEntity.positionComponent.speed.dy=-5;
+        playerEntity.sprite.currentAnim=1;
+        ECS_SetEntity(&game->gameScene.ecs,bulletEntity.entity_id,bulletEntity);
+    }else{
+        playerEntity.sprite.currentAnim=0;
+    }
     ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
 }
 
