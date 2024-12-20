@@ -16,7 +16,7 @@ typedef struct{
     Scene gameScene;
     Player player;
     Status status;
-    Input lastInput;
+    InputState lastInput;
 }Game;
 
 Game * getCurrentGame(void);

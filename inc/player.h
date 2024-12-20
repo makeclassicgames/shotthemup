@@ -7,7 +7,7 @@
 
  typedef struct Player Player;
     
- typedef void (*updatePlayer)(Player* player, Input input);
+ typedef void (*updatePlayer)(Player* player, InputState input);
 
  typedef struct Player{
         int entity_id;

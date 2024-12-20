@@ -84,11 +84,12 @@ void initGameScene(Scene *scene, Background background){
     bulletEntity.sprite.texture=getSpriteTexture(SPRITE_BULLET);
     bulletEntity.sprite.frameCount=1;
     bulletEntity.sprite.animCount=1;
-    bulletEntity.sprite.frameWidth=8;
-    bulletEntity.sprite.frameHeight=8;
+    bulletEntity.sprite.frameWidth=16;
+    bulletEntity.sprite.frameHeight=16;
     bulletEntity.sprite.currentFrame=0;
     bulletEntity.sprite.currentAnim=0;
     bulletEntity.sprite.frameDelay=1;
+    
 
     //init camera
     scene->camera.offset=(Vector2){0,0};
@@ -102,28 +103,25 @@ void initGameScene(Scene *scene, Background background){
     ECS_SetEntity(&scene->ecs,bulletEntity.entity_id,bulletEntity);
 }
 
-void updateGamePlayer(Player * player, Input input){
+void updateGamePlayer(Player * player, InputState input){
     Game * game = getCurrentGame();
     Entity playerEntity = ECS_GetEntity(&game->gameScene.ecs,player->entity_id);
     playerEntity.positionComponent.speed.dy = 0;
     playerEntity.positionComponent.speed.dx = 0;
-    switch (input)
-    {
-    case UP:
+    
+    if(input.inputState[INPUT_DOWN]){
+
+        playerEntity.positionComponent.speed.dy = 5;
+    }
+    if(input.inputState[INPUT_UP]){
         playerEntity.positionComponent.speed.dy = -5;
-        break;
-    case DOWN:
-         playerEntity.positionComponent.speed.dy = 5;
-        break;
-    case LEFT:
-         playerEntity.positionComponent.speed.dx = -5;
-        break;
-    case RIGHT: 
+
+    }
+    if(input.inputState[INPUT_LEFT]){
+        playerEntity.positionComponent.speed.dx = -5;
+    }
+    if(input.inputState[INPUT_RIGHT]){
         playerEntity.positionComponent.speed.dx = 5;
-        break;
-  
-    default:
-        break;
     }
     ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
 }
@@ -169,12 +167,12 @@ void updateGame(Game * game){
     switch (game->status)
     {
     case INITIAL:
-        if(game->lastInput==START){
+        if(game->lastInput.inputState[INPUT_START]){
             game->status=MENU;
         }
         break;
     case MENU:
-        if(game->lastInput==START){
+        if(game->lastInput.inputState[INPUT_START]){
             game->status=GAME_LOOP;
         }
     case GAME_LOOP:

@@ -13,8 +13,6 @@ void update(void);
 void draw(void);
 
 
-Input input;
-
 // Main Function
 int main()
 {
@@ -25,7 +23,7 @@ int main()
     // While windows is open
     while (!WindowShouldClose())
     {
-        game->lastInput = readInput();
+        readInput(&game->lastInput);
         // update()
         update();
         // Draw()
