@@ -1,4 +1,6 @@
 #include <raylib.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "ecs.h"
 #include "player.h"
 #include "game.h"
@@ -11,14 +13,22 @@ Game * getCurrentGame(void){
 }
 
 void updateGameScene(Scene *scene){
-    scene->background.yoffSet++;
+    scene->background.yoffSet--;
     scene->camera.target.y=scene->background.yoffSet;
+
+    //update enemies position using tags
+    // Entity* enemies= (sizeof(Entity)*scene->ecs.count);
+    // int count=0;
+    //TODO: Fix Core Dumped on Hastag
+
+    //searchByTag(&scene->ecs,"enemy",enemies,&count);
+
+    
     ECS_UpdateEntities(&scene->ecs);
     
 }
 
 void drawGameScene(Scene *scene){
-    
 
     BeginMode2D(scene->camera);
         DrawTextureEx(scene->background.texture, (Vector2){scene->background.xoffSet,scene->background.yoffSet}, 0.0f, 2.7f, WHITE);
@@ -44,6 +54,7 @@ void initGameScene(Scene *scene, Background background){
     enemyEntity.sprite.frameWidth=64;
     enemyEntity.sprite.frameHeight=64;
     enemyEntity.sprite.frameDelay=10;
+    addTag(&enemyEntity,"enemy");
 
     //ENtity2
     int enemyEntity_id2 = ECS_CreateEntity(&scene->ecs);
@@ -59,6 +70,7 @@ void initGameScene(Scene *scene, Background background){
     enemyEntity2.sprite.frameWidth=64;
     enemyEntity2.sprite.frameHeight=64;
     enemyEntity2.sprite.frameDelay=10;
+    addTag(&enemyEntity2,"enemy");
     //Entity3
 
     int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
@@ -74,33 +86,22 @@ void initGameScene(Scene *scene, Background background){
     enemyEntity3.sprite.currentFrame=0;
     enemyEntity3.sprite.currentAnim=0;
     enemyEntity3.sprite.frameDelay=5;
+    addTag(&enemyEntity3,"enemy"); 
 
-    //Bullet
-    int bulletEntity_id = ECS_CreateEntity(&scene->ecs);
-    Entity bulletEntity = ECS_GetEntity(&scene->ecs,bulletEntity_id);
-    bulletEntity.positionComponent.position.x=200;
-    bulletEntity.positionComponent.position.y=200;
-    bulletEntity.visibilityComponent.visible=true;
-    bulletEntity.sprite.texture=getSpriteTexture(SPRITE_BULLET);
-    bulletEntity.sprite.frameCount=1;
-    bulletEntity.sprite.animCount=1;
-    bulletEntity.sprite.frameWidth=16;
-    bulletEntity.sprite.frameHeight=16;
-    bulletEntity.sprite.currentFrame=0;
-    bulletEntity.sprite.currentAnim=0;
-    bulletEntity.sprite.frameDelay=1;
-    
 
     //init camera
     scene->camera.offset=(Vector2){0,0};
     scene->camera.target=(Vector2){scene->background.xoffSet,scene->background.xoffSet+scene->background.yoffSet};
     scene->camera.rotation=0.0f;
     scene->camera.zoom=1.0f;
+    
+    scene->timerCount=0;
+
+
 
     ECS_SetEntity(&scene->ecs,enemyEntity.entity_id,enemyEntity);
     ECS_SetEntity(&scene->ecs,enemyEntity2.entity_id,enemyEntity2);
     ECS_SetEntity(&scene->ecs,enemyEntity3.entity_id,enemyEntity3);
-    ECS_SetEntity(&scene->ecs,bulletEntity.entity_id,bulletEntity);
 }
 
 void updateGamePlayer(Player * player, InputState input){
@@ -140,12 +141,34 @@ void updateGamePlayer(Player * player, InputState input){
         bulletEntity.sprite.currentAnim=0;
         bulletEntity.sprite.frameDelay=1;
         bulletEntity.positionComponent.speed.dy=-5;
+        addTag(&bulletEntity,"bullet");
         playerEntity.sprite.currentAnim=1;
+
         ECS_SetEntity(&game->gameScene.ecs,bulletEntity.entity_id,bulletEntity);
     }else{
         playerEntity.sprite.currentAnim=0;
     }
     ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
+}
+
+void timerFunct(void){
+    Game* game = getCurrentGame();
+    Scene* scene = &game->gameScene;
+    int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
+    Entity enemyEntity3 = ECS_GetEntity(&scene->ecs,enemyEntity_id3);    
+    enemyEntity3.positionComponent.position.x=rand()%800;
+    enemyEntity3.positionComponent.position.y=100;
+    enemyEntity3.visibilityComponent.visible=true;
+    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
+    enemyEntity3.sprite.frameCount=2;
+    enemyEntity3.sprite.animCount=2;
+    enemyEntity3.sprite.frameWidth=64;
+    enemyEntity3.sprite.frameHeight=64;
+    enemyEntity3.sprite.currentFrame=0;
+    enemyEntity3.sprite.currentAnim=0;
+    enemyEntity3.sprite.frameDelay=5;
+    enemyEntity3.positionComponent.speed.dy=2;
+    ECS_SetEntity(&game->gameScene.ecs,enemyEntity_id3,enemyEntity3);
 }
 
 void initGame(Game* game){
@@ -167,6 +190,7 @@ void initGame(Game* game){
     playerEntity.sprite.currentFrame = 0;
     playerEntity.sprite.currentAnim = 0;
     playerEntity.sprite.frameDelay = 5;
+    addTag(&playerEntity,"player");
     initPlayer(&game->player);
     game->status=GAME_LOOP;
     game->player.update=updateGamePlayer;
@@ -182,6 +206,9 @@ void initGame(Game* game){
     game->gameScene.init(&game->gameScene,bg);
     game->gameScene.update=updateGameScene;
     game->gameScene.draw=drawGameScene;
+
+    initTimer(&game->gameScene.timers[0],120,timerFunct,true);
+    startTimer(&game->gameScene.timers[0]);
 }
 
 void updateGame(Game * game){
@@ -199,7 +226,7 @@ void updateGame(Game * game){
         }
     case GAME_LOOP:
         game->player.update(&game->player,game->lastInput);
-
+        updateTimer(&game->gameScene.timers[0]);
         game->gameScene.update(&game->gameScene);
         break;
     

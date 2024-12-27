@@ -1,4 +1,5 @@
 #include "ecs.h"
+#include <string.h>
 
 static int next_entity_id = 0;
 
@@ -13,6 +14,7 @@ int ECS_CreateEntity(ECS *ecs)
 {
     Entity entity;
     entity.entity_id = next_entity_id;
+    entity.tags.tagCount = 0;
     next_entity_id++;
     ecs->entities[ecs->count] = entity;
     ecs->count++;
@@ -91,4 +93,64 @@ void ECS_DrawEntities(ECS *ecs)
                             ecs->entities[i].positionComponent.position.y,sprite.frameWidth,sprite.frameHeight},(Vector2){0,0},transform.rotation, WHITE);
         }
     }
+}
+
+//Tags
+
+void addTag(Entity* entity,const char *tag)
+{
+    if(entity->tags.tagCount<MAX_TAGS)
+    {
+        strcpy(entity->tags.tag[entity->tags.tagCount],tag);
+        entity->tags.tagCount++;
+    }
+}
+
+void removeTag(Entity* entity,const char *tag)
+{
+    for(int i=0;i<entity->tags.tagCount;i++)
+    {
+        if(strcmp(entity->tags.tag[i],tag)==0)
+        {
+            for(int j=i;j<entity->tags.tagCount-1;j++)
+            {
+                strcpy(entity->tags.tag[j],entity->tags.tag[j+1]);
+            }
+            entity->tags.tagCount--;
+        }
+    }
+}
+
+bool hasTag(Entity* entity,const char *tag)
+{
+    for(int i=0;i<entity->tags.tagCount;i++)
+    {
+
+        if(strcmp(entity->tags.tag[i],tag)==0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void searchByTag(ECS *ecs,const char *tag,Entity *entities,int *count)
+{
+    *count=0;
+    for(int i=0;i<ecs->count;i++)
+    {
+        if(hasTag(&ecs->entities[i],tag))
+        {
+           
+            entities[*count]=ecs->entities[i];
+            *count++;
+        }
+    }
+}
+
+//Timer Scenes
+void addTimerToScene(Scene *scene, long maxTime, TimerCallback callback, bool repeat){
+    Timer* timer=&scene->timers[scene->timerCount];
+    initTimer(timer,maxTime,callback,repeat);
+    scene->timerCount++;
 }

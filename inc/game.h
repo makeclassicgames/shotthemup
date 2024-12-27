@@ -3,6 +3,7 @@
 
 #include "ecs.h"
 #include "player.h"
+#include "timer.h"
 
 typedef enum state{
     INITIAL,
