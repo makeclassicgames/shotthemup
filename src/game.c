@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "ecs.h"
 #include "player.h"
+#include "objects.h"
 #include "game.h"
 #include "resources.h"
 
@@ -43,49 +44,20 @@ void initGameScene(Scene *scene, Background background){
     scene->background.xoffSet=background.xoffSet;
     scene->background.yoffSet=background.yoffSet;
     Entity enemyEntity = ECS_GetEntity(&scene->ecs,enemyEntity_id);
-    enemyEntity.positionComponent.position.x=100;
-    enemyEntity.positionComponent.position.y=100;
-    enemyEntity.visibilityComponent.visible=true;
-    enemyEntity.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity.sprite.currentFrame=0;
-    enemyEntity.sprite.currentAnim=0;
-    enemyEntity.sprite.frameCount=2;
-    enemyEntity.sprite.animCount=2;
-    enemyEntity.sprite.frameWidth=64;
-    enemyEntity.sprite.frameHeight=64;
-    enemyEntity.sprite.frameDelay=10;
+    initEnemyEntity(&enemyEntity,100,100,getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
+   
     addTag(&enemyEntity,"enemy");
 
     //ENtity2
     int enemyEntity_id2 = ECS_CreateEntity(&scene->ecs);
     Entity enemyEntity2 = ECS_GetEntity(&scene->ecs,enemyEntity_id2);    
-    enemyEntity2.positionComponent.position.x=160;
-    enemyEntity2.positionComponent.position.y=100;
-    enemyEntity2.visibilityComponent.visible=true;
-    enemyEntity2.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity2.sprite.currentFrame=0;
-    enemyEntity2.sprite.currentAnim=0;
-    enemyEntity2.sprite.frameCount=2;
-    enemyEntity2.sprite.animCount=2;
-    enemyEntity2.sprite.frameWidth=64;
-    enemyEntity2.sprite.frameHeight=64;
-    enemyEntity2.sprite.frameDelay=10;
+    initEnemyEntity(&enemyEntity2,200,100,getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
     addTag(&enemyEntity2,"enemy");
     //Entity3
 
     int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
     Entity enemyEntity3 = ECS_GetEntity(&scene->ecs,enemyEntity_id3);    
-    enemyEntity3.positionComponent.position.x=220;
-    enemyEntity3.positionComponent.position.y=100;
-    enemyEntity3.visibilityComponent.visible=true;
-    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity3.sprite.frameCount=2;
-    enemyEntity3.sprite.animCount=2;
-    enemyEntity3.sprite.frameWidth=64;
-    enemyEntity3.sprite.frameHeight=64;
-    enemyEntity3.sprite.currentFrame=0;
-    enemyEntity3.sprite.currentAnim=0;
-    enemyEntity3.sprite.frameDelay=5;
+    initEnemyEntity(&enemyEntity3,300,100,getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
     addTag(&enemyEntity3,"enemy"); 
 
 
@@ -129,17 +101,7 @@ void updateGamePlayer(Player * player, InputState input){
         //fire bullet
         int bulletEntity_id = ECS_CreateEntity(&game->gameScene.ecs);
         Entity bulletEntity = ECS_GetEntity(&game->gameScene.ecs,bulletEntity_id);
-        bulletEntity.positionComponent.position.x=playerEntity.positionComponent.position.x+16;
-        bulletEntity.positionComponent.position.y=playerEntity.positionComponent.position.y-8;
-        bulletEntity.visibilityComponent.visible=true;
-        bulletEntity.sprite.texture=getSpriteTexture(SPRITE_BULLET);
-        bulletEntity.sprite.frameCount=1;
-        bulletEntity.sprite.animCount=1;
-        bulletEntity.sprite.frameWidth=16;
-        bulletEntity.sprite.frameHeight=16;
-        bulletEntity.sprite.currentFrame=0;
-        bulletEntity.sprite.currentAnim=0;
-        bulletEntity.sprite.frameDelay=1;
+        initBulletEntity(&bulletEntity,playerEntity.positionComponent.position.x+16,playerEntity.positionComponent.position.y-8,getSpriteTexture(SPRITE_BULLET),1,1,16,16,5);
         bulletEntity.positionComponent.speed.dy=-5;
         addTag(&bulletEntity,"bullet");
         playerEntity.sprite.currentAnim=1;
@@ -206,8 +168,7 @@ void initGame(Game* game){
     game->gameScene.init(&game->gameScene,bg);
     game->gameScene.update=updateGameScene;
     game->gameScene.draw=drawGameScene;
-
-    initTimer(&game->gameScene.timers[0],120,timerFunct,true);
+    addTimerToScene(&game->gameScene,120,timerFunct,true);
     startTimer(&game->gameScene.timers[0]);
 }
 
