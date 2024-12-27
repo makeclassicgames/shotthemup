@@ -118,17 +118,8 @@ void timerFunct(void){
     Scene* scene = &game->gameScene;
     int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
     Entity enemyEntity3 = ECS_GetEntity(&scene->ecs,enemyEntity_id3);    
-    enemyEntity3.positionComponent.position.x=rand()%800;
-    enemyEntity3.positionComponent.position.y=100;
-    enemyEntity3.visibilityComponent.visible=true;
-    enemyEntity3.sprite.texture=getSpriteTexture(SPRITE_ENEMY_1);
-    enemyEntity3.sprite.frameCount=2;
-    enemyEntity3.sprite.animCount=2;
-    enemyEntity3.sprite.frameWidth=64;
-    enemyEntity3.sprite.frameHeight=64;
-    enemyEntity3.sprite.currentFrame=0;
-    enemyEntity3.sprite.currentAnim=0;
-    enemyEntity3.sprite.frameDelay=5;
+    initEnemyEntity(&enemyEntity3,rand()%800,100,
+    getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
     enemyEntity3.positionComponent.speed.dy=2;
     ECS_SetEntity(&game->gameScene.ecs,enemyEntity_id3,enemyEntity3);
 }
