@@ -18,12 +18,15 @@ void updateGameScene(Scene *scene){
     scene->camera.target.y=scene->background.yoffSet;
 
     //update enemies position using tags
-    // Entity* enemies= (sizeof(Entity)*scene->ecs.count);
-    // int count=0;
+    Entity enemies[10];//(sizeof(Entity)*scene->ecs.count);
+    int count=0;
     //TODO: Fix Core Dumped on Hastag
 
-    //searchByTag(&scene->ecs,"enemy",enemies,&count);
-
+    searchByTag(&scene->ecs,"enemy",enemies,&count);
+    for (int i=0;i<count;i++){
+        enemies[i].positionComponent.speed.dy=3.0f;
+        ECS_SetEntity(&scene->ecs,enemies[i].entity_id,enemies[i]);
+    }
     
     ECS_UpdateEntities(&scene->ecs);
     
@@ -131,24 +134,12 @@ void initGame(Game* game){
   
     game->player.entity_id=playerEntityId;
     Entity playerEntity = ECS_GetEntity(&game->gameScene.ecs,playerEntityId);
-    playerEntity.positionComponent.position.x=100;
-    playerEntity.positionComponent.position.y=400;
-    playerEntity.visibilityComponent.visible=true;
-    
-    playerEntity.sprite.texture = getSpriteTexture(SPRITE_PLAYER_1);
-    playerEntity.sprite.frameCount = 2;
-    playerEntity.sprite.animCount = 3;
-    playerEntity.sprite.frameWidth = 64;
-    playerEntity.sprite.frameHeight = 64;
-    playerEntity.sprite.currentFrame = 0;
-    playerEntity.sprite.currentAnim = 0;
-    playerEntity.sprite.frameDelay = 5;
+    initPlayerEntity(&playerEntity,100,400,getSpriteTexture(SPRITE_PLAYER_1),2,3,64,64,5);
     addTag(&playerEntity,"player");
     initPlayer(&game->player);
     game->status=GAME_LOOP;
     game->player.update=updateGamePlayer;
     //init Entities
-    
 
     game->gameScene.init=initGameScene;
     ECS_SetEntity(&game->gameScene.ecs,game->player.entity_id,playerEntity);

@@ -16,4 +16,10 @@ void initBulletEntity(Entity* entity,float x,
   int frameCount,
    int animCount,
     int frameWidth, int frameHeight, int frameDelay);
+
+void initPlayerEntity(Entity* entity,float x,
+ float y, Texture2D texture,
+  int frameCount,
+   int animCount,
+    int frameWidth, int frameHeight, int frameDelay);
 #endif // OBJECTS_H

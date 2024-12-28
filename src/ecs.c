@@ -134,18 +134,19 @@ bool hasTag(Entity* entity,const char *tag)
     return false;
 }
 
-void searchByTag(ECS *ecs,const char *tag,Entity *entities,int *count)
+void searchByTag(ECS *ecs,const char *tag,Entity *entities,int *size)
 {
-    *count=0;
+    int count = 0;
     for(int i=0;i<ecs->count;i++)
     {
         if(hasTag(&ecs->entities[i],tag))
         {
            
-            entities[*count]=ecs->entities[i];
-            *count++;
+            entities[count]=ecs->entities[i];
+            count++;
         }
     }
+    *size=count;
 }
 
 //Timer Scenes
