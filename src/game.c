@@ -14,7 +14,7 @@ Game * getCurrentGame(void){
 }
 
 void updateGameScene(Scene *scene){
-    scene->background.yoffSet++;
+    scene->background.yoffSet--;
     scene->camera.target.y=scene->background.yoffSet;
 
     //update enemies position using tags
@@ -35,7 +35,7 @@ void updateGameScene(Scene *scene){
 void drawGameScene(Scene *scene){
 
     BeginMode2D(scene->camera);
-        DrawTextureEx(scene->background.texture, (Vector2){scene->background.xoffSet,0}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(scene->background.texture, (Vector2){scene->background.rect.x,scene->background.rect.y}, 0.0f, 1.0f, WHITE);
     EndMode2D();
     ECS_DrawEntities(&scene->ecs);
 }
@@ -46,6 +46,7 @@ void initGameScene(Scene *scene, Background background){
     scene->background.texture=background.texture;
     scene->background.xoffSet=background.xoffSet;
     scene->background.yoffSet=background.yoffSet;
+    scene->background.rect=background.rect;
     Entity enemyEntity = ECS_GetEntity(&scene->ecs,enemyEntity_id);
     initEnemyEntity(&enemyEntity,100,100,getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
    
@@ -121,7 +122,7 @@ void timerFunct(void){
     Scene* scene = &game->gameScene;
     int enemyEntity_id3 = ECS_CreateEntity(&scene->ecs);
     Entity enemyEntity3 = ECS_GetEntity(&scene->ecs,enemyEntity_id3);    
-    initEnemyEntity(&enemyEntity3,rand()%800,100,
+    initEnemyEntity(&enemyEntity3,rand()%GetScreenWidth(),-64,
     getSpriteTexture(SPRITE_ENEMY_1),2,2,64,64,10);
     enemyEntity3.positionComponent.speed.dy=2;
     ECS_SetEntity(&game->gameScene.ecs,enemyEntity_id3,enemyEntity3);
@@ -147,6 +148,7 @@ void initGame(Game* game){
     bg.texture=getGfxTexture(SKY_BG);
     bg.xoffSet=0;
     bg.yoffSet=0;
+    bg.rect=(Rectangle){-GetScreenWidth()/9,GetScreenHeight()-bg.texture.height,bg.texture.width,bg.texture.height};
     game->gameScene.init(&game->gameScene,bg);
     game->gameScene.update=updateGameScene;
     game->gameScene.draw=drawGameScene;

@@ -16,7 +16,7 @@ void initTextures(void){
 
     gfxTextures[TITLE_SCREEN]= LoadTexture(buffer);
 
-    sprintf(buffer,GFX_TEXTURES_PATH,"sky.jpg");
+    sprintf(buffer,GFX_TEXTURES_PATH,"map.png");
     gfxTextures[SKY_BG]=LoadTexture(buffer);
     //Sprites
     sprintf(buffer,SPRITES_TEXTURES_PATH,"navesprt.png");
