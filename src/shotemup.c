@@ -40,7 +40,7 @@ void init(void)
 {
     Game* game = getCurrentGame();
     // Init Window (width, Height, title)
-    InitWindow(800, 450, "Hello Raylib");
+    InitWindow(800, 450, "Shot Them Up");
     // Set target FPS
     SetTargetFPS(60);
     initTextures();
@@ -53,7 +53,27 @@ void update(void)
 {
 
     Game* game = getCurrentGame();
-    updateGame(game);
+
+     switch (game->status)
+    {
+    case INITIAL:
+        if(game->lastInput.inputState[INPUT_START]){
+            game->status=MENU;
+        }
+        break;
+    case MENU:
+        if(game->lastInput.inputState[INPUT_START]){
+            game->status=GAME_LOOP;
+        }
+    case GAME_LOOP:
+        game->player.update(&game->player,game->lastInput);
+        updateSceneTimers(&game->gameScene);
+        game->gameScene.update(&game->gameScene);
+        break;
+    
+    default:
+        break;
+    }
 }
 
 // draw
@@ -67,6 +87,22 @@ void draw(void)
     // Draw Text
     // Finish Drawing Mode
    
-    drawGame(game);
+     switch (game->status)
+    {
+    case INITIAL:
+        DrawText("Initial State", 290, 200, 20, BLACK);
+        break;
+    case MENU:
+        Texture2D texture= getGfxTexture(TITLE_SCREEN);
+        DrawTexture(texture,0,0,WHITE);
+        break;
+    case GAME_LOOP:
+        
+        game->gameScene.draw(&game->gameScene);
+        break;
+    
+    default:
+        break;
+    }
     EndDrawing();
 }

@@ -14,11 +14,11 @@ Game * getCurrentGame(void){
 }
 
 void updateGameScene(Scene *scene){
-    scene->background.yoffSet--;
+    scene->background.yoffSet++;
     scene->camera.target.y=scene->background.yoffSet;
 
     //update enemies position using tags
-    Entity enemies[10];//(sizeof(Entity)*scene->ecs.count);
+    Entity enemies[10];
     int count=0;
     //TODO: Fix Core Dumped on Hastag
 
@@ -35,7 +35,7 @@ void updateGameScene(Scene *scene){
 void drawGameScene(Scene *scene){
 
     BeginMode2D(scene->camera);
-        DrawTextureEx(scene->background.texture, (Vector2){scene->background.xoffSet,scene->background.yoffSet}, 0.0f, 2.7f, WHITE);
+        DrawTextureEx(scene->background.texture, (Vector2){scene->background.xoffSet,0}, 0.0f, 1.0f, WHITE);
     EndMode2D();
     ECS_DrawEntities(&scene->ecs);
 }
@@ -152,48 +152,4 @@ void initGame(Game* game){
     game->gameScene.draw=drawGameScene;
     addTimerToScene(&game->gameScene,120,timerFunct,true);
     startTimer(&game->gameScene.timers[0]);
-}
-
-void updateGame(Game * game){
-
-    switch (game->status)
-    {
-    case INITIAL:
-        if(game->lastInput.inputState[INPUT_START]){
-            game->status=MENU;
-        }
-        break;
-    case MENU:
-        if(game->lastInput.inputState[INPUT_START]){
-            game->status=GAME_LOOP;
-        }
-    case GAME_LOOP:
-        game->player.update(&game->player,game->lastInput);
-        updateTimer(&game->gameScene.timers[0]);
-        game->gameScene.update(&game->gameScene);
-        break;
-    
-    default:
-        break;
-    }
-}
-
-void drawGame(Game* game){
-    switch (game->status)
-    {
-    case INITIAL:
-        DrawText("Initial State", 290, 200, 20, BLACK);
-        break;
-    case MENU:
-        Texture2D texture= getGfxTexture(TITLE_SCREEN);
-        DrawTexture(texture,0,0,WHITE);
-        break;
-    case GAME_LOOP:
-        
-        game->gameScene.draw(&game->gameScene);
-        break;
-    
-    default:
-        break;
-    }
 }

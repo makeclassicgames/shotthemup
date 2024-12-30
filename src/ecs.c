@@ -155,3 +155,9 @@ void addTimerToScene(Scene *scene, long maxTime, TimerCallback callback, bool re
     initTimer(timer,maxTime,callback,repeat);
     scene->timerCount++;
 }
+
+void updateSceneTimers(Scene *scene){
+    for(int i=0;i<scene->timerCount;i++){
+        updateTimer(&scene->timers[i]);
+    }
+}

@@ -22,7 +22,5 @@ typedef struct{
 
 Game * getCurrentGame(void);
 void initGame(Game * );
-void updateGame(Game* );
-void drawGame(Game * );
 
 #endif

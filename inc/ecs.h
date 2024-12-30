@@ -98,5 +98,5 @@ void searchByTag(ECS *ecs, const char *tag, Entity *entities, int *count);
 
 //Timer Scene
 void addTimerToScene(Scene *scene, long maxTime, TimerCallback callback, bool repeat);
-
+void updateTimers(Scene *scene);
 #endif
