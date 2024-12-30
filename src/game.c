@@ -14,13 +14,17 @@ Game * getCurrentGame(void){
 }
 
 void updateGameScene(Scene *scene){
-    scene->background.yoffSet--;
+  
+    if(scene->background.yoffSet>GetScreenHeight()-scene->background.texture.height){
+        scene->background.yoffSet--;
+    }
+    
+    
     scene->camera.target.y=scene->background.yoffSet;
 
     //update enemies position using tags
     Entity enemies[10];
     int count=0;
-    //TODO: Fix Core Dumped on Hastag
 
     searchByTag(&scene->ecs,"enemy",enemies,&count);
     for (int i=0;i<count;i++){
