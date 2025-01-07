@@ -90,18 +90,22 @@ void updateGamePlayer(Player * player, InputState input){
     playerEntity.positionComponent.speed.dy = 0;
     playerEntity.positionComponent.speed.dx = 0;
     
-    if(input.inputState[INPUT_DOWN]){
+    if(input.inputState[INPUT_DOWN] && 
+    playerEntity.positionComponent.position.y<GetScreenHeight()-playerEntity.sprite.frameHeight){
 
         playerEntity.positionComponent.speed.dy = 5;
     }
-    if(input.inputState[INPUT_UP]){
+    if(input.inputState[INPUT_UP] &&
+     playerEntity.positionComponent.position.y>0){
         playerEntity.positionComponent.speed.dy = -5;
 
     }
-    if(input.inputState[INPUT_LEFT]){
+    if(input.inputState[INPUT_LEFT] && 
+    playerEntity.positionComponent.position.x>0){
         playerEntity.positionComponent.speed.dx = -5;
     }
-    if(input.inputState[INPUT_RIGHT]){
+    if(input.inputState[INPUT_RIGHT] && 
+     playerEntity.positionComponent.position.x<GetScreenWidth()-playerEntity.sprite.frameWidth){
         playerEntity.positionComponent.speed.dx = 5;
     }
 
