@@ -13,6 +13,12 @@ Game * getCurrentGame(void){
     return &game;
 }
 
+void finishFireAnimation(){
+    Game * game = getCurrentGame();
+    Entity playerEntity = ECS_GetEntity(&game->gameScene.ecs,game->player.entity_id);
+    playerEntity.sprite.currentAnim=0;
+    ECS_SetEntity(&game->gameScene.ecs,game->player.entity_id,playerEntity);
+}
 void updateGameScene(Scene *scene){
   
     if(scene->background.yoffSet>GetScreenHeight()-scene->background.texture.height){
@@ -90,18 +96,22 @@ void updateGamePlayer(Player * player, InputState input){
     playerEntity.positionComponent.speed.dy = 0;
     playerEntity.positionComponent.speed.dx = 0;
     
-    if(input.inputState[INPUT_DOWN]){
+    if(input.inputState[INPUT_DOWN] && 
+    playerEntity.positionComponent.position.y<GetScreenHeight()-playerEntity.sprite.frameHeight){
 
         playerEntity.positionComponent.speed.dy = 5;
     }
-    if(input.inputState[INPUT_UP]){
+    if(input.inputState[INPUT_UP] &&
+     playerEntity.positionComponent.position.y>0){
         playerEntity.positionComponent.speed.dy = -5;
 
     }
-    if(input.inputState[INPUT_LEFT]){
+    if(input.inputState[INPUT_LEFT] && 
+    playerEntity.positionComponent.position.x>0){
         playerEntity.positionComponent.speed.dx = -5;
     }
-    if(input.inputState[INPUT_RIGHT]){
+    if(input.inputState[INPUT_RIGHT] && 
+     playerEntity.positionComponent.position.x<GetScreenWidth()-playerEntity.sprite.frameWidth){
         playerEntity.positionComponent.speed.dx = 5;
     }
 
@@ -115,8 +125,8 @@ void updateGamePlayer(Player * player, InputState input){
         playerEntity.sprite.currentAnim=1;
 
         ECS_SetEntity(&game->gameScene.ecs,bulletEntity.entity_id,bulletEntity);
-    }else{
-        playerEntity.sprite.currentAnim=0;
+        addTimerToScene(&game->gameScene,6,finishFireAnimation,false);
+        startTimer(&game->gameScene.timers[1]);
     }
     ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
 }
