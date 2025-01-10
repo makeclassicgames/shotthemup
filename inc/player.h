@@ -26,6 +26,9 @@
     
  typedef void (*updatePlayer)(Player* player, InputState input);
 
+/**
+ * @brief Player 
+ */
  typedef struct Player{
         int entity_id;
         short lives;
@@ -35,6 +38,9 @@
    
 
    
-
+    /**
+     * @brief Initialize a player
+     * @param player Player player to be initialized
+     */
     void initPlayer(Player *player);
 #endif

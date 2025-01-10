@@ -22,18 +22,57 @@
 
 #include "ecs.h"
 
+
+/**
+ * @brief Initialize an enemy entity
+ * @param entity Entity entity to be initialized
+ * @param x X position
+ * @param y Y position
+ * @param texture Texture2D texture of the entity (sprite)
+ * @param frameCount number of frames per animation
+ * @param animCount number of animations
+ * @param frameWidth width of a frame
+ * @param frameHeight height of a frame
+ * @param frameDelay delay between frames
+ */
 void initEnemyEntity(Entity *entity, float x,
                      float y, Texture2D texture,
                      int frameCount,
                      int animCount,
                      int frameWidth, int frameHeight, int frameDelay);
 
+
+/**
+ * @brief Initialize an Bullet entity
+ * @param entity Entity entity to be initialized
+ * @param x X position
+ * @param y Y position
+ * @param texture Texture2D texture of the entity (sprite)
+ * @param frameCount number of frames per animation
+ * @param animCount number of animations
+ * @param frameWidth width of a frame
+ * @param frameHeight height of a frame
+ * @param frameDelay delay between frames
+ */
 void initBulletEntity(Entity *entity, float x,
                       float y, Texture2D texture,
                       int frameCount,
                       int animCount,
                       int frameWidth, int frameHeight, int frameDelay);
 
+
+/**
+ * @brief Initialize an Player entity
+ * @param entity Entity entity to be initialized
+ * @param x X position
+ * @param y Y position
+ * @param texture Texture2D texture of the entity (sprite)
+ * @param frameCount number of frames per animation
+ * @param animCount number of animations
+ * @param frameWidth width of a frame
+ * @param frameHeight height of a frame
+ * @param frameDelay delay between frames
+ */
 void initPlayerEntity(Entity *entity, float x,
                       float y, Texture2D texture,
                       int frameCount,
