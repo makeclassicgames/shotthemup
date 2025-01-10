@@ -70,5 +70,4 @@ void initPlayerEntity(Entity *entity, float x,
     entity->collisionComponent.yoffset = 5;
     entity->collisionComponent.width = 30;
     entity->collisionComponent.height = 50;
-
 }
