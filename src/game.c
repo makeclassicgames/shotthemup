@@ -30,12 +30,22 @@ void updateGameScene(Scene *scene){
 
     //update enemies position using tags
     Entity enemies[10];
+    Entity bullets[20];
+    int bulletCount=0;
     int count=0;
 
     searchByTag(&scene->ecs,"enemy",enemies,&count);
+    searchByTag(&scene->ecs,"bullet",bullets,&bulletCount);
+
     for (int i=0;i<count;i++){
         enemies[i].positionComponent.speed.dy=3.0f;
+        for(int j=0;j<bulletCount;j++){
+            if(ECS_EntityIsColliding(&enemies[i],&bullets[j])){
+                ECS_DestroyEntity(&scene->ecs,enemies[i].entity_id);
+            }
+        }
         ECS_SetEntity(&scene->ecs,enemies[i].entity_id,enemies[i]);
+
     }
     
     ECS_UpdateEntities(&scene->ecs);
@@ -123,9 +133,8 @@ void updateGamePlayer(Player * player, InputState input){
         bulletEntity.positionComponent.speed.dy=-5;
         addTag(&bulletEntity,"bullet");
         playerEntity.sprite.currentAnim=1;
-
+        addProperty(&bulletEntity,"damage",1);
         ECS_SetEntity(&game->gameScene.ecs,bulletEntity.entity_id,bulletEntity);
-        addTimerToScene(&game->gameScene,6,finishFireAnimation,false);
         startTimer(&game->gameScene.timers[1]);
     }
     ECS_SetEntity(&game->gameScene.ecs,player->entity_id,playerEntity);
@@ -167,5 +176,6 @@ void initGame(Game* game){
     game->gameScene.update=updateGameScene;
     game->gameScene.draw=drawGameScene;
     addTimerToScene(&game->gameScene,120,timerFunct,true);
+    addTimerToScene(&game->gameScene,6,finishFireAnimation,false);
     startTimer(&game->gameScene.timers[0]);
 }

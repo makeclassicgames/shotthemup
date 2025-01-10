@@ -2,12 +2,14 @@
 #define ECS_H
 #include <raylib.h>
 
+#include "properties.h"
 #include "physics.h"
 #include "timer.h"
 
 #define MAX_ENTITIES 100
 #define MAX_TAGS 10
 #define MAX_TIMERS 10
+#define MAX_PROPERTIES 50
 
 typedef struct{
     Texture2D texture;
@@ -46,6 +48,11 @@ typedef struct{
     int tagCount;
 }TagComponent;
 
+typedef struct{
+    KeyValue properties[MAX_PROPERTIES];
+    int propertyCount;
+}PropertyComponent;
+
 
 typedef struct{
     PositionComponent positionComponent;
@@ -53,6 +60,8 @@ typedef struct{
     TransformComponent transform;
     SpriteComponent sprite;
     TagComponent tags;
+    Collider collisionComponent;
+    PropertyComponent properties;
     int entity_id;
 }Entity;
 
@@ -89,6 +98,7 @@ void ECS_UpdateEntities(ECS *ecs);
 void ECS_DrawEntities(ECS *ecs);
 Entity ECS_GetEntity(ECS *ecs, int entity_id);
 void ECS_SetEntity(ECS *ecs, int entity_id, Entity entity);
+bool ECS_EntityIsColliding(Entity *entity1, Entity *entity2);
 
 //Tag System
 void addTag(Entity *entity, const char *tag);
@@ -99,4 +109,10 @@ void searchByTag(ECS *ecs, const char *tag, Entity *entities, int *count);
 //Timer Scene
 void addTimerToScene(Scene *scene, long maxTime, TimerCallback callback, bool repeat);
 void updateTimers(Scene *scene);
+
+//Properties System
+
+void addProperty(Entity *entity, const char *key, PropertyValue value);
+void removeProperty(Entity *entity, const char *key);
+void getProperty(Entity *entity, const char *key, PropertyValue *value);
 #endif

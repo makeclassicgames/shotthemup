@@ -402,6 +402,7 @@ endif
 PROJECT_SOURCE_FILES ?= \
    input.c  \
    timer.c \
+   properties.c \
    objects.c \
    ecs.c \
    resources.c \
