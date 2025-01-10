@@ -14,4 +14,11 @@
         float rotation;
         float scale;
     }Transformation;
+
+    typedef struct{
+        float xoffset;
+        float yoffset;
+        float width;
+        float height;
+    }Collider;
 #endif
