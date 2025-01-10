@@ -22,6 +22,9 @@
 
 typedef void (*TimerCallback)(void);
 
+/**
+ * @brief Timer structure
+ */
 typedef struct{
     long maxTime;
     long currentTime;
@@ -30,9 +33,32 @@ typedef struct{
     TimerCallback callback;
 }Timer;
 
+
+/**
+ * @brief Initialize a timer
+ * @param timer Timer to be initialized
+ * @param maxTime Maximum time
+ * @param callback Callback function
+ * @param repeat Repeat the timer
+ */
 void initTimer(Timer* timer,long maxTime,TimerCallback callback,bool repeat);
+
+/**
+ * @brief Update the timer
+ * @param timer Timer to be updated
+ */
 void updateTimer(Timer* timer);
+
+/**
+ * @brief Start the timer
+ * @param timer Timer to be started
+ */
 void startTimer(Timer* timer);
+
+/**
+ * @brief Stop the timer
+ * @param timer Timer to be stopped
+ */
 void stopTimer(Timer* timer);
 
 #endif // TIMER_H

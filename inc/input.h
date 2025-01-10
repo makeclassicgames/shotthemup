@@ -19,19 +19,53 @@
 
 #include <raylib.h>
 
+// Input Constants
+/**
+ * @brief Input UP
+ */
 #define INPUT_UP 0
+/**
+ * @brief Input DOWN
+ */
 #define INPUT_DOWN 1
-#define INPUT_LEFT 2
-#define INPUT_RIGHT 3
-#define INPUT_FIRE 4
-#define INPUT_START 5
-#define INPUT_NONE 6
 
+/**
+ * @brief Input LEFT
+ */
+#define INPUT_LEFT 2
+
+/**
+ * @brief Input RIGHT
+ */
+#define INPUT_RIGHT 3
+
+/**
+ * @brief Input FIRE
+ */
+#define INPUT_FIRE 4
+
+/**
+ * @brief Input START
+ */
+#define INPUT_START 5
+
+/**
+ * @brief Input State
+ */
 typedef struct
 {
     bool inputState[6];
 } InputState;
 
+
+/**
+ * @brief Initialize Input
+ */
 void initInput(void);
+
+/**
+ * @brief Read Input from Keyboard and gamepad
+ * @param input Input State returned
+ */
 void readInput(InputState *);
 #endif

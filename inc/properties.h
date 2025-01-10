@@ -22,11 +22,26 @@
 
 typedef void* PropertyValue;
 
+/**
+ * @brief Key Value Type
+ */
 typedef struct{
 char key[50];
 PropertyValue value;
 }KeyValue;
 
+/**
+ * @brief Create a key value pair
+ * @param key Key
+ * @param value Value
+ * @return KeyValue created
+ */
 KeyValue createKeyValue(const char* key, PropertyValue value);
+
+/**
+ * @brief Add a property to an entity
+ * @param keyValue KeyValue to get
+ * @param value Value getted
+ */
 void getValue(KeyValue* keyValue, void * value);
 #endif
