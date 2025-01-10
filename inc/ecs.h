@@ -1,15 +1,42 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #ifndef ECS_H
 #define ECS_H
+
+/**
+ * @file
+ * @brief ECS System Definition
+ */
+
 #include <raylib.h>
 
 #include "properties.h"
 #include "physics.h"
 #include "timer.h"
 
+//MAX values for ECS
 #define MAX_ENTITIES 100
+//MAX Tags for an entity
 #define MAX_TAGS 10
+//MAX Timers for a scene
 #define MAX_TIMERS 10
+//MAX Properties for an entity
 #define MAX_PROPERTIES 50
+
+
 
 typedef struct{
     Texture2D texture;
