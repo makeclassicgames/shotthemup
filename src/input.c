@@ -7,72 +7,74 @@ void initInput(void)
 {
 }
 
-void readInput(InputState * state)
+void readInput(InputState *state)
 {
 
-
-    for(int i=0;i<6;i++)
+    InputState gamepadState;
+    for (int i = 0; i < 6; i++)
     {
-        state->inputState[i]=false;
+        state->inputState[i] = false;
+        gamepadState.inputState[i] = false;
     }
 
-    if(IsGamepadAvailable(0))
+    if (IsGamepadAvailable(0))
     {
-        readGamepadInput(state);
+        readGamepadInput(&gamepadState);
     }
-    else
-    {
-        state->inputState[INPUT_DOWN]=IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S);
-        state->inputState[INPUT_UP]=IsKeyDown(KEY_UP) || IsKeyDown(KEY_W);
-        state->inputState[INPUT_LEFT]=IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
-        state->inputState[INPUT_RIGHT]=IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
-        state->inputState[INPUT_FIRE]=IsKeyPressed(KEY_SPACE);
-        state->inputState[INPUT_START]=IsKeyPressed(KEY_ENTER);
-        state->inputState[INPUT_FIRE]=IsKeyPressed(KEY_SPACE);
-        state->inputState[INPUT_START]=IsKeyPressed(KEY_ENTER);
-    }
-  
+    state->inputState[INPUT_DOWN] = gamepadState.inputState[INPUT_DOWN] || (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S));
+    state->inputState[INPUT_UP] = gamepadState.inputState[INPUT_UP] || (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W));
+    state->inputState[INPUT_LEFT] = gamepadState.inputState[INPUT_LEFT] || (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A));
+    state->inputState[INPUT_RIGHT] = gamepadState.inputState[INPUT_RIGHT] || (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D));
+    state->inputState[INPUT_FIRE] = gamepadState.inputState[INPUT_FIRE] || IsKeyPressed(KEY_SPACE);
+    state->inputState[INPUT_START] = gamepadState.inputState[INPUT_START] || IsKeyPressed(KEY_ENTER);
 }
 
-void readGamepadInput(InputState *state){
- 
-    if(GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_Y)>0)
+void readGamepadInput(InputState *state)
+{
+
+    if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) > 0)
     {
-        state->inputState[INPUT_DOWN]=true;
+        state->inputState[INPUT_DOWN] = true;
     }
-    else if(GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_Y)<0)
+    else if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) < 0)
     {
-        state->inputState[INPUT_UP]=true;
+        state->inputState[INPUT_UP] = true;
     }
 
-    if(GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_X)>0)
+    if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0)
     {
-        state->inputState[INPUT_RIGHT]=true;
-    }else if(GetGamepadAxisMovement(0,GAMEPAD_AXIS_LEFT_X)<0)
+        state->inputState[INPUT_RIGHT] = true;
+    }
+    else if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < 0)
     {
-        state->inputState[INPUT_LEFT]=true;
-    }
-  
-    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
-        state->inputState[INPUT_FIRE]=true;
+        state->inputState[INPUT_LEFT] = true;
     }
 
-    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
-        state->inputState[INPUT_START]=true;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+    {
+        state->inputState[INPUT_FIRE] = true;
     }
 
-    //D-pad
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN)){
-        state->inputState[INPUT_DOWN]=true;
-    }
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP)){
-        state->inputState[INPUT_UP]=true;
-    }
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
-        state->inputState[INPUT_LEFT]=true;
-    }
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
-        state->inputState[INPUT_RIGHT]=true;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
+    {
+        state->inputState[INPUT_START] = true;
     }
 
+    // D-pad
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+    {
+        state->inputState[INPUT_DOWN] = true;
+    }
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP))
+    {
+        state->inputState[INPUT_UP] = true;
+    }
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
+    {
+        state->inputState[INPUT_LEFT] = true;
+    }
+    if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
+    {
+        state->inputState[INPUT_RIGHT] = true;
+    }
 }

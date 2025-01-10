@@ -10,34 +10,38 @@ Texture2D gfxTextures[MAX_RES];
 
 Texture2D spriteTextures[MAX_RES];
 
-void initTextures(void){
+void initTextures(void)
+{
     char buffer[60];
-    sprintf(buffer,GFX_TEXTURES_PATH,"title.png");
+    sprintf(buffer, GFX_TEXTURES_PATH, "title.png");
 
-    gfxTextures[TITLE_SCREEN]= LoadTexture(buffer);
+    gfxTextures[TITLE_SCREEN] = LoadTexture(buffer);
 
-    sprintf(buffer,GFX_TEXTURES_PATH,"map.png");
-    gfxTextures[SKY_BG]=LoadTexture(buffer);
-    //Sprites
-    sprintf(buffer,SPRITES_TEXTURES_PATH,"navesprt.png");
-    spriteTextures[SPRITE_PLAYER_1]=LoadTexture(buffer);
-    //Enemy Sprite
-    sprintf(buffer,SPRITES_TEXTURES_PATH,"enemy.png");
-    spriteTextures[SPRITE_ENEMY_1]=LoadTexture(buffer);
-    //Bullet Sprite
-    sprintf(buffer,SPRITES_TEXTURES_PATH,"bullet.png");
-    spriteTextures[SPRITE_BULLET]=LoadTexture(buffer);
+    sprintf(buffer, GFX_TEXTURES_PATH, "map.png");
+    gfxTextures[SKY_BG] = LoadTexture(buffer);
+    // Sprites
+    sprintf(buffer, SPRITES_TEXTURES_PATH, "navesprt.png");
+    spriteTextures[SPRITE_PLAYER_1] = LoadTexture(buffer);
+    // Enemy Sprite
+    sprintf(buffer, SPRITES_TEXTURES_PATH, "enemy.png");
+    spriteTextures[SPRITE_ENEMY_1] = LoadTexture(buffer);
+    // Bullet Sprite
+    sprintf(buffer, SPRITES_TEXTURES_PATH, "bullet.png");
+    spriteTextures[SPRITE_BULLET] = LoadTexture(buffer);
 }
 
-Texture2D getSpriteTexture(int id){
+Texture2D getSpriteTexture(int id)
+{
     return spriteTextures[id];
 }
 
-Texture2D getGfxTexture(int id){
+Texture2D getGfxTexture(int id)
+{
     return gfxTextures[id];
 }
 
-void deInitTextures(void){
+void deInitTextures(void)
+{
     UnloadTexture(getGfxTexture(TITLE_SCREEN));
     UnloadTexture(getGfxTexture(SKY_BG));
     UnloadTexture(getSpriteTexture(SPRITE_PLAYER_1));

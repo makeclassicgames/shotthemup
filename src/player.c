@@ -7,7 +7,5 @@ void initPlayer(Player *player)
 {
     player->lives = 3;
     player->score = 0;
-    
-    
 }
 
